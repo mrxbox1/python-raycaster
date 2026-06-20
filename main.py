@@ -129,6 +129,21 @@ while running:
 
         if side == 1:
             color = (color[0] / 2, color[1] / 2, color[2] / 2)
+        
+        # 0% at a distance of 10
+        # 100% at a distance of 0
+        if perp_wallDist < 2:
+            _cmult = 1
+        elif perp_wallDist < 4:
+            _cmult = 0.8
+        elif perp_wallDist < 6:
+            _cmult = 0.6
+        elif perp_wallDist < 8:
+            _cmult = 0.4
+        else:
+            _cmult = 0.2
+
+        color = (int(color[0] * _cmult), int(color[1] * _cmult), int(color[2] * _cmult))
 
         pygame.draw.line(window, color, (x, draw_start), (x, draw_end))
 
@@ -177,7 +192,7 @@ while running:
     #print(dt)
     FPS = int(CLOCK.get_fps())
     pygame.display.set_caption(f"python-raycaster ({FPS} FPS)")
-    pygame.display.update()
+    pygame.display.flip()
 
 # quit
 pygame.quit()
