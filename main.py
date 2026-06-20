@@ -10,11 +10,12 @@ DEBUG = False
 
 # deltatime
 dt = 0
+FPS = 0
 
 # initialize pygame
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption(f"Raycaster - dt = {dt} ms")
+pygame.display.set_caption(f"python-raycaster ({FPS} FPS)")
 CLOCK = pygame.time.Clock()
 
 # set the player position and direction
@@ -178,7 +179,8 @@ while running:
 
     # update the display
     dt = CLOCK.tick()
-    pygame.display.set_caption(f"Raycaster - dt = {dt} ms")
+    FPS = int(CLOCK.get_fps())
+    pygame.display.set_caption(f"python-raycaster ({FPS} FPS)")
     pygame.display.update()
 
 # quit
