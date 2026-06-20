@@ -14,6 +14,7 @@ player_posX = 1.5
 player_posY = 1.5
 player_dirX = 1
 player_dirY = 0
+player_moveSpeed = 0.1
 
 # set the camera plane
 plane_X = 0
@@ -34,7 +35,7 @@ running = True
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            running = False
+            running = False 
     
     window.fill((0, 0, 0))
     
@@ -120,6 +121,19 @@ while running:
             color = (color[0] / 2, color[1] / 2, color[2] / 2)
 
         pygame.draw.line(window, color, (x, draw_start), (x, draw_end))
+
+    # get player input
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_UP]:
+        print("up")
+        if tilemap[int(player_posX + player_dirX * player_moveSpeed)][int(player_posY)] == False:
+            player_posX += player_dirX * player_moveSpeed
+        if tilemap[int(player_posX)][int(player_posY + player_dirY * player_moveSpeed)] == False:
+            player_posY += player_dirY * player_moveSpeed
+    if keys[pygame.K_LEFT]:
+        print("left")
+    if keys[pygame.K_RIGHT]:
+        print("right")
 
     # update the display
     pygame.display.update()
