@@ -15,6 +15,7 @@ player_posY = 1.5
 player_dirX = 1
 player_dirY = 0
 player_moveSpeed = 0.1
+player_rotSpeed = 0.1
 
 # set the camera plane
 plane_X = 0
@@ -126,10 +127,19 @@ while running:
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
         print("up")
-        if tilemap[int(player_posX + player_dirX * player_moveSpeed)][int(player_posY)] == False:
-            player_posX += player_dirX * player_moveSpeed
-        if tilemap[int(player_posX)][int(player_posY + player_dirY * player_moveSpeed)] == False:
-            player_posY += player_dirY * player_moveSpeed
+        _s = player_moveSpeed
+    elif keys[pygame.K_DOWN]:
+        print("down")
+        _s = -player_moveSpeed
+    else:
+        _s = 0
+
+    # collision, i guess
+    if tilemap[int(player_posX + player_dirX * _s)][int(player_posY)] == False:
+        player_posX += player_dirX * _s
+    if tilemap[int(player_posX)][int(player_posY + player_dirY * _s)] == False:
+        player_posY += player_dirY * _s
+
     if keys[pygame.K_LEFT]:
         print("left")
     if keys[pygame.K_RIGHT]:
