@@ -5,6 +5,19 @@ pygame.init()
 window = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Raycaster")
 
+# set the player position (in tiles)
+player_position = (1, 1)
+
+# create the tilemap
+tilemap = [[1,1,1,1,1,1,1,1],
+           [0,0,0,0,0,0,0,1],
+           [0,0,0,0,0,0,0,1],
+           [0,0,0,0,0,0,0,1],
+           [0,0,0,0,0,0,0,1],
+           [0,0,0,0,0,0,0,1],
+           [0,0,0,0,0,0,0,1],
+           [0,0,0,0,0,0,0,1]]
+
 # gameloop
 running = True
 while running:
@@ -12,7 +25,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
     
-    window.fill((255, 255, 255))
+    window.fill((0, 0, 0))
+
+    # draw the tilemap
+    for row in range(len(tilemap)):
+        for tile in range(len(tilemap[row])):
+            if tilemap[row][tile] != 0:
+                pygame.draw.rect(window, (0, 255, 0), [tile*16, row*16, 16, 16])
 
     # update the display
     pygame.display.update()
