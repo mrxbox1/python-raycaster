@@ -6,13 +6,16 @@ import os
 # some constants and shit
 WIDTH = 800
 HEIGHT = 600
+DEBUG = False
+
+# deltatime
+dt = 0
 
 # initialize pygame
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Raycaster")
+pygame.display.set_caption(f"Raycaster - dt = {dt} ms")
 CLOCK = pygame.time.Clock()
-dt = 0
 
 # set the player position and direction
 player_posX = 1.5
@@ -31,6 +34,10 @@ tilemap = json.loads(open(os.getcwd() + '/tiles.json', 'r').read())
 
 # colormap
 colormap = [(0, 255, 0), (255, 0, 0), (0, 0, 255)]
+
+# printdbg - print only when debugging
+def printdbg(string):
+    if DEBUG: print(string)
 
 # gameloop
 running = True
@@ -134,10 +141,10 @@ while running:
     # up/down player movement
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
-        print("up")
+        printdbg("up")
         _s = player_moveSpeed
     elif keys[pygame.K_DOWN]:
-        print("down")
+        printdbg("down")
         _s = -player_moveSpeed
     else:
         _s = 0
@@ -151,10 +158,10 @@ while running:
     
     # left/right player movement
     if keys[pygame.K_LEFT]:
-        print("left")
+        printdbg("left")
         _s = -player_rotSpeed
     elif keys[pygame.K_RIGHT]:
-        print("right")
+        printdbg("right")
         _s = player_rotSpeed
     else:
         _s = 0
@@ -171,6 +178,7 @@ while running:
 
     # update the display
     dt = CLOCK.tick()
+    pygame.display.set_caption(f"Raycaster - dt = {dt} ms")
     pygame.display.update()
 
 # quit
