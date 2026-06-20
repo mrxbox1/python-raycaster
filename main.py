@@ -10,13 +10,13 @@ player_position = (1, 1)
 
 # create the tilemap
 tilemap = [[1,1,1,1,1,1,1,1],
-           [0,0,0,0,0,0,0,1],
-           [0,0,0,0,0,0,0,1],
-           [0,0,0,0,0,0,0,1],
-           [0,0,0,0,0,0,0,1],
-           [0,0,0,0,0,0,0,1],
-           [0,0,0,0,0,0,0,1],
-           [0,0,0,0,0,0,0,1]]
+           [1,0,0,0,0,0,0,1],
+           [1,0,1,0,0,1,0,1],
+           [1,0,1,0,0,1,0,1],
+           [1,0,0,0,0,0,0,1],
+           [1,0,1,1,1,1,0,1],
+           [1,0,0,0,0,0,0,1],
+           [1,1,1,1,1,1,1,1]]
 
 # gameloop
 running = True
@@ -31,7 +31,10 @@ while running:
     for row in range(len(tilemap)):
         for tile in range(len(tilemap[row])):
             if tilemap[row][tile] != 0:
-                pygame.draw.rect(window, (0, 255, 0), [tile*16, row*16, 16, 16])
+                _color = (0, 255, 0)
+            else:
+                _color = (64, 64, 64)
+            pygame.draw.rect(window, _color, [tile*8, row*8, 8, 8])
 
     # update the display
     pygame.display.update()
