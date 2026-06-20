@@ -1,4 +1,5 @@
 import pygame
+import math
 
 # some constants and shit
 WIDTH = 800
@@ -8,14 +9,16 @@ HEIGHT = 600
 pygame.init()
 window = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Raycaster")
+CLOCK = pygame.time.Clock()
+dt = 0
 
 # set the player position and direction
 player_posX = 1.5
 player_posY = 1.5
 player_dirX = 1
 player_dirY = 0
-player_moveSpeed = 0.1
-player_rotSpeed = 0.1
+player_moveSpeed = 0.005
+player_rotSpeed = 0.0025
 
 # set the camera plane
 plane_X = 0
@@ -24,12 +27,15 @@ plane_Y = 0.66
 # create the tilemap
 tilemap = [[1,1,1,1,1,1,1,1],
            [1,0,0,0,0,0,0,1],
-           [1,0,1,0,0,1,0,1],
-           [1,0,1,0,0,1,0,1],
+           [1,0,1,0,0,2,0,1],
+           [1,0,1,0,0,2,0,1],
            [1,0,0,0,0,0,0,1],
-           [1,0,1,1,1,1,0,1],
+           [1,0,3,3,3,3,0,1],
            [1,0,0,0,0,0,0,1],
            [1,1,1,1,1,1,1,1]]
+
+# colormap
+colormap = [(0, 255, 0), (255, 0, 0), (0, 0, 255)]
 
 # gameloop
 running = True
@@ -38,8 +44,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False 
     
+
+    
+    # no color in the background
     window.fill((0, 0, 0))
     
+
+
     # the magic that i don't understand begins here
     for x in range(WIDTH):
         camera_X = 2 * x / WIDTH - 1
@@ -115,15 +126,17 @@ while running:
             draw_end = HEIGHT - 1
 
         color = (0, 0, 0)
-        if tilemap[player_mapY][player_mapX] == 1:
-            color = (0, 255, 0)
+        if tilemap[player_mapY][player_mapX] != 0:
+            color = colormap[tilemap[player_mapY][player_mapX] - 1]
 
         if side == 1:
             color = (color[0] / 2, color[1] / 2, color[2] / 2)
 
         pygame.draw.line(window, color, (x, draw_start), (x, draw_end))
 
-    # get player input
+
+
+    # up/down player movement
     keys = pygame.key.get_pressed()
     if keys[pygame.K_UP]:
         print("up")
@@ -133,19 +146,36 @@ while running:
         _s = -player_moveSpeed
     else:
         _s = 0
-
-    # collision, i guess
-    if tilemap[int(player_posX + player_dirX * _s)][int(player_posY)] == False:
-        player_posX += player_dirX * _s
-    if tilemap[int(player_posX)][int(player_posY + player_dirY * _s)] == False:
-        player_posY += player_dirY * _s
-
+    
+    # TODO: implement a collision system that actually works
+    # collision + movement, i guess
+    #if tilemap[int(player_posX + player_dirX * _s * dt)][int(player_posY)] == False:
+    player_posX += player_dirX * _s * dt
+    #if tilemap[int(player_posX)][int(player_posY + player_dirY * _s * dt)] == False:
+    player_posY += player_dirY * _s * dt
+    
+    # left/right player movement
     if keys[pygame.K_LEFT]:
         print("left")
-    if keys[pygame.K_RIGHT]:
+        _s = -player_rotSpeed
+    elif keys[pygame.K_RIGHT]:
         print("right")
+        _s = player_rotSpeed
+    else:
+        _s = 0
+    
+    # rotation and some trigonometry that my stupid brain cannot comprehend
+    old_dirX = player_dirX
+    player_dirX = player_dirX * math.cos(_s * dt) - player_dirY * math.sin(_s * dt)
+    player_dirY = old_dirX * math.sin(_s * dt) + player_dirY * math.cos(_s * dt)
+    old_planeX = plane_X
+    plane_X = plane_X * math.cos(_s * dt) - plane_Y * math.sin(_s * dt)
+    plane_Y = old_planeX * math.sin(_s * dt) + plane_Y * math.cos(_s * dt)
+
+
 
     # update the display
+    dt = CLOCK.tick()
     pygame.display.update()
 
 # quit
