@@ -1,5 +1,7 @@
 import pygame
 import math
+import json
+import os
 
 # some constants and shit
 WIDTH = 800
@@ -25,14 +27,7 @@ plane_X = 0
 plane_Y = 0.66
 
 # create the tilemap
-tilemap = [[1,1,1,1,1,1,1,1],
-           [1,0,0,0,0,0,0,1],
-           [1,0,1,0,0,2,0,1],
-           [1,0,1,0,0,2,0,1],
-           [1,0,0,0,0,0,0,1],
-           [1,0,3,3,3,3,0,1],
-           [1,0,0,0,0,0,0,1],
-           [1,1,1,1,1,1,1,1]]
+tilemap = json.loads(open(os.getcwd() + '/tiles.json', 'r').read())
 
 # colormap
 colormap = [(0, 255, 0), (255, 0, 0), (0, 0, 255)]
